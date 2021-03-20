@@ -29,7 +29,20 @@ func run([]string) error {
 		return nil
 	}
 
+	if len(flag.Args()) < 0 {
+		return fmt.Errorf("argument required")
+	}
+
+	switch flag.Arg(0) {
+	case "install":
+		return (cmdInstall())
+	}
+
 	return fmt.Errorf("unknown command")
+}
+
+func cmdInstall() error {
+	return fmt.Errorf("not implemented")
 }
 
 func main() {
