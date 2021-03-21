@@ -1,9 +1,15 @@
 package main
 
 import (
+	"bufio"
+	"bytes"
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"os"
+	"os/exec"
+	"path/filepath"
+	"strings"
 )
 
 var (
@@ -43,7 +49,35 @@ func run([]string) error {
 }
 
 func cmdInstall() error {
-	return fmt.Errorf("not implemented")
+	out, err := exec.Command("memo", "config", "--cat").Output()
+	if err != nil {
+		return fmt.Errorf("cannot exec memo: %f", err)
+	}
+	scanner := bufio.NewScanner(bytes.NewReader(out))
+
+	for scanner.Scan() {
+		text := scanner.Text()
+		if !strings.HasPrefix(text, "pluginsdir = ") {
+			continue
+		}
+		pluginDirPath := strings.TrimPrefix(text, "pluginsdir = ")
+		pluginDirPath = pluginDirPath[1 : len(pluginDirPath)-1]
+
+		srcPath := os.Args[0]
+		dstPath := filepath.Join(pluginDirPath, filepath.Base(srcPath))
+
+		input, err := ioutil.ReadFile(srcPath)
+		if err != nil {
+			return err
+		}
+
+		fmt.Fprintf(os.Stderr, "copyfile from:%s to:%s\n", srcPath, dstPath)
+		return ioutil.WriteFile(dstPath, input, 0755)
+	}
+	if err := scanner.Err(); err != nil {
+		return fmt.Errorf("cannot read exec memo output: %f", err)
+	}
+	return fmt.Errorf("could not find plugins dir path")
 }
 
 func main() {
