@@ -42,7 +42,7 @@ func run([]string) error {
 
 	switch flag.Arg(0) {
 	case "install":
-		return (cmdInstall())
+		return cmdInstall()
 	}
 
 	return fmt.Errorf("unknown command")
