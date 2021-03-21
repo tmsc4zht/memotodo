@@ -16,6 +16,7 @@ func run([]string) error {
 	var versionFlag bool
 
 	flag.BoolVar(&usageFlag, "usage", false, "print usage")
+	flag.BoolVar(&versionFlag, "version", false, "print version")
 
 	flag.Parse()
 
