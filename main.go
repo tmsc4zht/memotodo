@@ -43,9 +43,15 @@ func run([]string) error {
 	switch flag.Arg(0) {
 	case "install":
 		return cmdInstall()
+	case "new":
+		return cmdNewTodo()
 	}
 
 	return fmt.Errorf("unknown command")
+}
+
+func cmdNewTodo() error {
+	return fmt.Errorf("command new is not implemented yet")
 }
 
 func cmdInstall() error {
