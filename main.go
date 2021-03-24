@@ -10,6 +10,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 var (
@@ -51,7 +52,25 @@ func run([]string) error {
 }
 
 func cmdNewTodo() error {
-	return fmt.Errorf("command new is not implemented yet")
+	memodir := os.Getenv("MEMODIR")
+	filename := time.Now().Format("2006-01-02-todo.md")
+	memopath := filepath.Join(memodir, filename)
+	_, err := os.Stat(memopath)
+	if err == nil {
+		fmt.Fprintln(os.Stderr, "todofile exist open it")
+		cmd := exec.Command("memo", "edit", filename)
+		cmd.Stderr = os.Stderr
+		cmd.Stdout = os.Stdout
+		cmd.Stdin = os.Stdin
+		return cmd.Run()
+	}
+
+	cmd := exec.Command("memo", "new", "todo")
+	cmd.Stderr = os.Stderr
+	cmd.Stdout = os.Stdout
+	cmd.Stdin = os.Stdin
+
+	return cmd.Run()
 }
 
 func cmdInstall() error {
