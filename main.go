@@ -18,6 +18,15 @@ var (
 	Revision = "unset"
 )
 
+func copyFile(src, dst string) error {
+	input, err := ioutil.ReadFile(src)
+	if err != nil {
+		return nil
+	}
+
+	return ioutil.WriteFile(dst, input, 0644)
+}
+
 func run([]string) error {
 	var usageFlag bool
 	var versionFlag bool
