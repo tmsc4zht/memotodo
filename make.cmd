@@ -10,4 +10,4 @@ $revision = (git rev-parse --short HEAD)
 Write-Verbose "Build as version='$version' revision='$revision'"
 
 Write-Verbose "$ go build"
-go build -trimpath -ldflags "-s -w -X main.Version=$version -X main.Revision=$revision"
+go build -o todo.exe -trimpath -ldflags "-s -w -X main.Version=$version -X main.Revision=$revision"
