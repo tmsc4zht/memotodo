@@ -18,6 +18,28 @@ var (
 	Revision = "unset"
 )
 
+func lastTodo(paths []string) (string, bool) {
+	var lastDate time.Time
+
+	for _, path := range paths {
+		name := filepath.Base(path)
+
+		t, err := time.Parse("2006-01-02-todo.md", name)
+		if err != nil {
+			continue
+		}
+		if t.After(lastDate) {
+			lastDate = t
+		}
+	}
+
+	if lastDate.IsZero() {
+		return "", false
+	}
+
+	return lastDate.Format("2006-01-02-todo.md"), true
+}
+
 func copyFile(src, dst string) error {
 	input, err := ioutil.ReadFile(src)
 	if err != nil {
