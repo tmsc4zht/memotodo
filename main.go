@@ -96,11 +96,28 @@ func cmdNewTodo() error {
 		return cmd.Run()
 	}
 
-	cmd := exec.Command("memo", "new", "todo")
+	files, err := filepath.Glob(filepath.Join(memodir, "*-todo.md"))
+	if err != nil {
+		return fmt.Errorf("could not search memodir: %v", err)
+	}
+
+	lastTodoFile, ok := lastTodo(files)
+	if !ok {
+		cmd := exec.Command("memo", "new", "todo")
+		cmd.Stderr = os.Stderr
+		cmd.Stdout = os.Stdout
+		cmd.Stdin = os.Stdin
+		return cmd.Run()
+	}
+
+	if err := copyFile(filepath.Join(memodir, lastTodoFile), memopath); err != nil {
+		return fmt.Errorf("could not copy from last todo file: %v", err)
+	}
+
+	cmd := exec.Command("memo", "edit", filename)
 	cmd.Stderr = os.Stderr
 	cmd.Stdout = os.Stdout
 	cmd.Stdin = os.Stdin
-
 	return cmd.Run()
 }
 
