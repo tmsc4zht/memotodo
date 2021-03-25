@@ -88,7 +88,6 @@ func cmdNewTodo() error {
 	memopath := filepath.Join(memodir, filename)
 	_, err := os.Stat(memopath)
 	if err == nil {
-		fmt.Fprintln(os.Stderr, "todofile exist open it")
 		cmd := exec.Command("memo", "edit", filename)
 		cmd.Stderr = os.Stderr
 		cmd.Stdout = os.Stdout
@@ -144,7 +143,6 @@ func cmdInstall() error {
 			return err
 		}
 
-		fmt.Fprintf(os.Stderr, "copyfile from:%s to:%s\n", srcPath, dstPath)
 		return ioutil.WriteFile(dstPath, input, 0755)
 	}
 	if err := scanner.Err(); err != nil {
