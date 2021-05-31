@@ -1,4 +1,4 @@
-@rem this code based on https://github.com/zetamatta/nyagos/blob/master/make.cmd
+@rem this code is based on https://github.com/zetamatta/nyagos/blob/master/make.cmd
 @powershell "iex((@('')*3+(cat '%~f0'|select -skip 3))-join[char]10)"
 @exit /b %ERRORLEVEL%
 
